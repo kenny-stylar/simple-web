@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://localhost',
+	'url' => 'http://www.example.com/simple-web/',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -180,5 +180,19 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 
 	),
+
+
+
+	/*
+	|--------------------------------------------------------------------------
+	| Seeties extra configuration
+	|--------------------------------------------------------------------------
+	|
+	| Configuration settings for seeties.me
+	|
+	*/
+
+	'api_url' => 'https://api.seeties.me/',
+	'token' 	=> 'JDJ5JDA4JGJsRHBtbXBwWmRabjV0OENlTC43Zy4yaTQ4L1NGR3M4NWV1b3R3bXJrWnkxMUNNWGpTY1F5',
 
 );
