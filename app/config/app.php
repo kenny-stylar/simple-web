@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://www.example.com/simple-web/',
+	'url' => 'http://www.example.com/',
 
 	/*
 	|--------------------------------------------------------------------------

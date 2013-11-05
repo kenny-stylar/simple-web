@@ -11,7 +11,32 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+Route::get('/', array(
+  'as'    => 'index',
+  'uses'  => 'HomeController@getHomeView'
+));
+
+//feed page
+Route::get('/feed', array(
+  'as'    => 'feed',
+  'uses'  => 'FeedController@getFeedView'
+));
+Route::post('/feed', array(
+  'uses'  => 'FeedController@postFeed'
+));
+
+//post page
+Route::get('/post/user', array(
+  'as'    => 'userpost',
+  'uses'  => 'UserPostController@getUserPost'
+));
+Route::post('/post/user', array(
+  'uses'  => 'UserPostController@postUserPost'
+));
+Route::get('/post/userlike', array(
+  'as'    => 'userlike',
+  'uses'  => 'UserPostController@getUserLike'
+));
+Route::post('/post/userlike', array(
+  'uses'  => 'UserPostController@postUserLike'
+));

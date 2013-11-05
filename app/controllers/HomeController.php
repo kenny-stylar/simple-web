@@ -1,23 +1,36 @@
 <?php
 
+/**
+*	Homepage controller 
+* @path /
+*/
+
 class HomeController extends BaseController {
 
-	/*
-	|--------------------------------------------------------------------------
-	| Default Home Controller
-	|--------------------------------------------------------------------------
-	|
-	| You may wish to use controllers instead of, or in addition to, Closure
-	| based routes. That's great! Here is an example controller method to
-	| get you started. To route to this controller, just add the route:
-	|
-	|	Route::get('/', 'HomeController@showWelcome');
-	|
+	/**
+	*	Meta title & description for page
+	* @return Array
+	*/
+	private function getMeta() {
+		$metadata = array(
+			'title' => 'Simple Web Version',		//* title for page
+			'desc' 	=> 'Short description',			//short description about page
+			'meta'	=> array(							
+				'title'		=> 'Simple Web Version | Seeties',		//head <title> tag
+				'description' => 'Sample meta description'	//head <meta description> tag
+			)
+		);
+
+		return $metadata;
+	}
+
+	/**
+	*	Homepage view
+	* @return View
 	*/
 
-	public function showWelcome()
-	{
-		return View::make('hello');
+	public function getHomeView() {
+		return View::make('index', $this->getMeta());
 	}
 
 }
