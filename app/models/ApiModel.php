@@ -39,6 +39,22 @@ abstract class ApiModel {
   }
 
   /**
+  * CURL POST request function
+  * @return Array
+  */
+  public static function curlDeleteRequest($url) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+    $return = curl_exec($ch);
+    curl_close($ch);
+
+    return json_decode($return, true);
+  }
+
+  /**
   * Showing output if available
   * @param $url - request URL
   * @param $method - request method ('get', 'post', 'delete')
@@ -55,6 +71,9 @@ abstract class ApiModel {
         break;
       case 'post':
         $return['output'] = self::curlPostRequest( $url, $data );
+        break;
+      case 'delete':
+        $return['output'] = self::curlDeleteRequest( $url );
         break;
       default:
         

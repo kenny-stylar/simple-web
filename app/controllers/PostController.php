@@ -221,4 +221,38 @@ class PostController extends BaseController {
     }
   }
 
+  /**
+  * GET /post/deletepost view
+  * @return View
+  */
+  public function getDeletePost() {
+    $data = $this->getMeta();
+    $data['desc'] .= 'post/&lt;post_id&gt;';
+
+    if ( $this->chkCurlProcess('curl') ) {
+      $c_url = PostModel::generateApiUrl( 'post/{post_id}', PostModel::autoFill(Input::old(), PostModel::$qs_fill) );
+      $c_result = PostModel::getResult( $c_url, 'delete' );
+
+      $data['request_url'] = $c_url;
+      $data['result'] = $c_result;
+    }
+    
+    return View::make('post.deletepost', $data);
+  }
+
+  /**
+  * POST /post/deletepost
+  * @return Redirect
+  */
+  public function postDeletePost() {
+    $validator = Validator::make( Input::get(), PostModel::$qs_rules );
+
+    if ( $validator->fails() ) {
+      return Redirect::route('delete_post')->withErrors($validator)->withInput();
+    }
+    else {
+      return Redirect::route('delete_post', array('curl'=>1))->withInput();
+    }
+  }
+
 }

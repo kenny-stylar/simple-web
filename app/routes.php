@@ -123,3 +123,15 @@ Route::get('/post/deletepost', array(
   'as'    => 'delete_post',
   'uses'  => 'PostController@getDeletePost'
 ));
+Route::post('/post/deletepost', array(
+  'uses'  => 'PostController@postDeletePost'
+));
+
+//explore page
+Route::get('/explore/cities', array(
+  'as'    => 'cities',
+  'uses'  => 'ExploreController@getCities'
+));
+Route::post('/post/userposts', array(
+  'uses'  => 'ExploreController@postCities'
+));
