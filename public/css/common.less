@@ -1,0 +1,65 @@
+code{
+  white-space: inherit;
+}
+
+#header{
+  .navbar{
+    margin-bottom: 0;
+  }
+  .bs-header{
+    background-color: #eee;
+    padding: 30px 15px 40px;
+    font-size:18px;
+    h1{
+      font-size: 60px;
+    }
+    p{
+      color:#777;
+    }
+  }
+} 
+
+#footer{
+  background-color:#eee;
+  border-top:1px solid #ccc;
+  margin-top:40px;
+  padding:5px 0;
+}
+
+#sidebar{
+  margin-top:40px;
+  border-top:1px solid #ddd;
+  .nav{
+    > li{
+      > a{
+        border:1px solid #ddd;
+        border-top:none;
+      }
+    }
+  }
+}
+
+.control-label{
+  &.required{
+    position: relative;
+    &:after{
+      content: '*';
+      position: absolute;
+      right: 3px;
+      color:#f00;
+      font-weight: bold;
+      font-size: 17px;
+    }
+  }
+} 
+.feedblock{
+  padding:10px;
+  border:1px solid #ddd;
+  margin-bottom:20px; 
+  .fname{
+    font-weight: bold;
+  }
+}
+.result{
+  margin-top:40px;
+}
