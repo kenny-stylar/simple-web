@@ -18,9 +18,10 @@
         </div>
         <nav class="navicontrol">
           <ul class="nav navbar-nav">
+            <li><a href="{{ URL::route('user_register') }}">User</a></li>
             <li><a href="{{ URL::route('feed') }}">Feed</a></li>
             <li><a href="{{ URL::route('user_posts') }}">Post</a></li>
-            <li><a href="{{ URL::route('user_register') }}">User</a></li>
+            <li><a href="{{ URL::route('cities') }}">Explore</a></li>
           </ul>
         </nav>
       </div>

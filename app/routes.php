@@ -132,6 +132,20 @@ Route::get('/explore/cities', array(
   'as'    => 'cities',
   'uses'  => 'ExploreController@getCities'
 ));
-Route::post('/post/userposts', array(
+Route::post('/explore/cities', array(
   'uses'  => 'ExploreController@postCities'
+));
+Route::get('/explore/city', array(
+  'as'    => 'city',
+  'uses'  => 'ExploreController@getCity'
+));
+Route::post('/explore/city', array(
+  'uses'  => 'ExploreController@postCity'
+));
+Route::get('/explore/cityposts', array(
+  'as'    => 'city_posts',
+  'uses'  => 'ExploreController@getCityPosts'
+));
+Route::post('/explore/cityposts', array(
+  'uses'  => 'ExploreController@postCityPosts'
 ));

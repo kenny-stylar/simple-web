@@ -31,6 +31,25 @@ class CommonHelper {
   }
 
   /**
+  * Get list of cities
+  * @return Array
+  */
+  public static function getCities() {
+    $c_url = ExploreModel::generateApiUrl('explore', array('token'=>Session::get('user_token')));
+    $result = ExploreModel::getResult($c_url, 'get');
+
+    $return = array();
+    if ( $result['status'] ) {
+      //reconstructs object 
+      foreach ( $result['output'] AS $city ) {
+        $return[ $city['city_id'] ] = $city['name'];
+      }
+    }
+
+    return $return;
+  }
+
+  /**
   * Convert multiple array to single array
   * @param $array - array to convert
   * @param $join - implode string
@@ -47,7 +66,7 @@ class CommonHelper {
         $val = implode($val, $join);
       $return[$key] = $val;
     }
-    
+
     return $return;
   }
 

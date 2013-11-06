@@ -21,14 +21,9 @@
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('type', 'Type', array('class'=>'col-lg-2 control-label required')) }}
-        <div class="col-lg-5">
-          {{ Form::select('type', array(
-            'all'        => 'All',
-            'home_city'  => 'Home',
-            'other_city' => 'Other',
-            'nearby'     => 'Nearby'
-          ), null, array('class'=>'form-control')) }}
+        {{ Form::label('city_id', 'City', array('class'=>'col-lg-2 control-label required')) }}
+        <div class="col-lg-4">
+          {{ Form::select('city_id', $cities, null, array('class'=>'form-control')) }}
         </div>
       </div>
       <div class="form-group">
@@ -52,7 +47,7 @@
       </div>
       <div class="form-group">
         {{ Form::label('sort', 'Sort', array('class'=>'col-lg-2 control-label')) }}
-        <div class="col-lg-5">
+        <div class="col-lg-4">
           {{ Form::select('sort', array(
             '1'  => 'Most Recent',
             '2'  => 'Popular'
@@ -62,7 +57,7 @@
       
       <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
-          {{ Form::submit('Submit', array('class'=>'btn btn-info')) }}
+          {{ Form::submit('Get City Posts', array('class'=>'btn btn-info')) }}
         </div>
       </div>
 
@@ -90,10 +85,6 @@
   </div>
   @else
   <p>No Request Make</p>
-  @endif
-
-  @if (!empty($htmlview))
-  {{ $htmlview }}
   @endif
 
 @stop
