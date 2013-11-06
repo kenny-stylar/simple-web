@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Feedpage controller 
+* Feed page controller 
 * @group Feed
 */
 
@@ -14,7 +14,7 @@ class FeedController extends BaseController {
   private function getMeta() {
     $metadata = array(
       'title' => 'Feed',    
-      'desc'  => 'Request URL: GET ' . Config::get('app.api_url') . 'feed',     
+      'desc'  => 'Request URL: ' . Config::get('app.api_url'),     
       'meta'  => array(             
         'title'   => 'Feed | Seeties',    
         'description' => 'Sample meta description'  
@@ -31,6 +31,7 @@ class FeedController extends BaseController {
   */
   public function getFeed() {
     $data = $this->getMeta();
+    $data['desc'] .= 'feed';
     $data['categories'] = CommonHelper::getCategories();
 
     if ( $this->chkCurlProcess('curl') ) {

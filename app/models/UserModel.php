@@ -7,13 +7,13 @@ class UserModel extends ApiModel {
     'token'       => ''
   );
 
-  public static $qs_logout_fill = array(
-    'token'       => ''
-  );
-
   public static $qs_rules = array(
     'uid'         => 'required',
     'token'       => 'required'
+  );
+
+  public static $qs_logout_fill = array(
+    'token'       => ''
   );
 
   public static $qs_logout_rules = array(

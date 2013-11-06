@@ -15,46 +15,39 @@
       @endif
 
       <div class="form-group">
+        {{ Form::label('uid', 'User ID', array('class'=>'col-lg-2 control-label fhidden')) }}
+        <div class="col-lg-10">
+          {{ Form::text('uid', Session::get('uid'), array('class'=>'form-control', 'readonly'=>'readonly')) }}
+        </div>
+      </div>
+      <div class="form-group">
         {{ Form::label('token', 'Token', array('class'=>'col-lg-2 control-label fhidden')) }}
         <div class="col-lg-10">
           {{ Form::text('token', Session::get('user_token'), array('class'=>'form-control', 'readonly'=>'readonly')) }}
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('catagory', 'Category', array('class'=>'col-lg-2 control-label required')) }}
-        <div class="col-lg-5">
-          {{ Form::select('category', $categories, null, array('class'=>'form-control')) }}
+        {{ Form::label('catagories', 'Catagories', array('class'=>'col-lg-2 control-label required')) }}
+        <div class="col-lg-10">
+          @foreach ( $categories AS $key => $val )
+          <div class="checkbox">
+            <label>
+              {{ Form::checkbox('categories[]', $key) }}
+              {{ $val }}
+            </label>
+          </div>
+          @endforeach
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('message', 'Message', array('class'=>'col-lg-2 control-label required')) }}
-        <div class="col-lg-10">
-          {{ Form::textarea('message', '', array('class'=>'form-control')) }}
+        {{ Form::label('page', 'Page', array('class'=>'col-lg-2 control-label')) }}
+        <div class="col-lg-2">
+          {{ Form::text('page', '1', array('class'=>'form-control')) }}
         </div>
       </div>
-      <div class="form-group">
-        {{ Form::label('url', 'URL', array('class'=>'col-lg-2 control-label')) }}
-        <div class="col-lg-10">
-          {{ Form::text('url', '', array('class'=>'form-control')) }}
-        </div>
-      </div>
-      <div class="form-group">
-        {{ Form::label('place_name', 'Place', array('class'=>'col-lg-2 control-label required')) }}
-        <div class="col-lg-10">
-          {{ Form::text('place_name', '', array('class'=>'form-control')) }}
-        </div>
-      </div>
-      <div class="form-group">
-        {{ Form::label('location', 'Location', array('class'=>'col-lg-2 control-label')) }}
-        <div class="col-lg-10">
-          {{ Form::text('location', '', array('class'=>'form-control')) }}
-        </div>
-      </div>
-      
-      
       <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
-          {{ Form::submit('Create Post', array('class'=>'btn btn-info')) }}
+          {{ Form::submit('Submit', array('class'=>'btn btn-info')) }}
         </div>
       </div>
 

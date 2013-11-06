@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Postpage controller 
+* Post page controller 
 * @group Post
 */
 
@@ -14,7 +14,7 @@ class PostController extends BaseController {
   private function getMeta() {
     $metadata = array(
       'title' => 'Post',    
-      'desc'  => 'Request URL: GET ' . Config::get('app.api_url') . '&lt;uid&gt;/posts',     
+      'desc'  => 'Request URL: ' . Config::get('app.api_url'),     
       'meta'  => array(             
         'title'   => 'Post | Seeties',    
         'description' => 'Sample meta description'  
@@ -26,71 +26,82 @@ class PostController extends BaseController {
   }
 
   /**
-  * GET /post/user view
+  * GET /post/userposts view
   * @return View
   */
-  public function getUserPost() {
+  public function getUserPosts() {
     $data = $this->getMeta();
+    $data['desc'] .= '&lt;uid&gt;/posts';
     $data['categories'] = CommonHelper::getCategories();
 
-    if ( $this->chkCurlProcess() ) {
-      if ( $result = $this->getResults('{uid}/posts', new UserPostModel) ) {
-        $result['output'] = View::make('layout.feedblock', array('feeds'=>$result['output']['data']));
+    if ( $this->chkCurlProcess('curl') ) {
+      $c_url = PostModel::generateApiUrl( '{uid}/posts', PostModel::autoFill(Input::old(), PostModel::$qs_user_fill) );
+      $c_result = PostModel::getResult( $c_url, 'get' );
 
-        $data['result'] = $result;
+      $data['request_url'] = $c_url;
+      $data['result'] = $c_result;
+
+      //create html view from output
+      if ( $c_result['status'] ) {
+        $data['htmlview'] = View::make('layout.feedblock', array('feeds'=>$c_result['output']['data']));
       }
     }
       
-    return View::make('post.userPost', $data);
+    return View::make('post.userposts', $data);
   }
 
   /**
-  * POST /post/user
+  * POST /post/userposts
   * @return Redirect
   */
-  public function postUserPost() {
-    $validator = Validator::make( Input::get(), UserPostModel::$rules );
+  public function postUserPosts() {
+    $validator = Validator::make( Input::get(), PostModel::$qs_user_rules );
 
     if ( $validator->fails() ) {
-      return Redirect::route('userpost')->withErrors($validator)->withInput();
+      return Redirect::route('user_posts')->withErrors($validator)->withInput();
     }
     else {
-      return Redirect::route('userpost', array('curl'=>1))->withInput();
+      return Redirect::route('user_posts', array('curl'=>1))->withInput();
     }
   }
 
   /**
-  * GET /post/userlike view
+  * GET /post/userlikes view
   * @return View
   */
-  public function getUserLike() {
+  public function getUserLikes() {
     $data = $this->getMeta();
-    $data['desc'] = 'Request URL: GET ' . Config::get('app.api_url') . '&lt;uid&gt;/likes';
+    $data['desc'] .= '&lt;uid&gt;/likes';
     $data['categories'] = CommonHelper::getCategories();
 
-    if ( $this->chkCurlProcess() ) {
-      if ( $result = $this->getResults('{uid}/likes', new UserPostModel) ) {
-        $result['output'] = View::make('layout.feedblock', array('feeds'=>$result['output']['posts']));
+    if ( $this->chkCurlProcess('curl') ) {
+      $c_url = PostModel::generateApiUrl( '{uid}/likes', PostModel::autoFill(Input::old(), PostModel::$qs_user_fill) );
+      $c_result = PostModel::getResult( $c_url, 'get' );
 
-        $data['result'] = $result;
+      $data['request_url'] = $c_url;
+      $data['result'] = $c_result;
+
+      //create html view from output
+      if ( $c_result['status'] ) {
+        $data['htmlview'] = View::make('layout.feedblock', array('feeds'=>$c_result['output']['posts']));
       }
     }
 
-    return View::make('post.userLike', $data);
+    return View::make('post.userlikes', $data);
   }
 
   /**
-  * POST /post/userlike
+  * POST /post/userlikes
   * @return Redirect
   */
-  public function postUserLike() {
-    $validator = Validator::make( Input::get(), UserPostModel::$rules );
+  public function postUserLikes() {
+    $validator = Validator::make( Input::get(), PostModel::$qs_user_rules );
 
     if ( $validator->fails() ) {
-      return Redirect::route('userlike')->withErrors($validator)->withInput();
+      return Redirect::route('user_likes')->withErrors($validator)->withInput();
     }
     else {
-      return Redirect::route('userlike', array('curl'=>1))->withInput();
+      return Redirect::route('user_likes', array('curl'=>1))->withInput();
     }
   }
 
@@ -100,15 +111,33 @@ class PostController extends BaseController {
   */
   public function getCreatePost() {
     $data = $this->getMeta();
-    $data['desc'] = 'Request URL: POST ' . Config::get('app.api_url') . 'post';
+    $data['desc'] .= 'post';
     $data['categories'] = CommonHelper::getCategories();
 
-    if ( $this->chkCurlProcess() ) {
-      $result = $this->getResults('post', new PostModel);
-      $data['result'] = $result;
+    if ( $this->chkCurlProcess('curl') ) {
+      $c_url = PostModel::generateApiUrl( 'post', PostModel::autoFill(Input::old(), PostModel::$qs_post_fill) );
+      $c_result = PostModel::getResult( $c_url, 'post', PostModel::autoFill(Input::old(), PostModel::$form_create_fill) );
+
+      $data['request_url'] = $c_url;
+      $data['result'] = $c_result;
     }
 
-    return View::make('post.createPost', $data);
+    return View::make('post.createpost', $data);
+  }
+
+  /**
+  * POST /post/createpost
+  * @return Redirect
+  */
+  public function postCreatePost() {
+    $validator = Validator::make( Input::get(), PostModel::$form_create_rules );
+
+    if ( $validator->fails() ) {
+      return Redirect::route('create_post')->withErrors($validator)->withInput();
+    }
+    else {
+      return Redirect::route('create_post', array('curl'=>1))->withInput();
+    }
   }
 
   /**
@@ -117,17 +146,21 @@ class PostController extends BaseController {
   */
   public function getReadPost() {
     $data = $this->getMeta();
-    $data['desc'] = 'Request URL: GET ' . Config::get('app.api_url') . 'post/&lt;post_id&gt;';
+    $data['desc'] .= 'post/&lt;post_id&gt;';
 
-    if ( $this->chkCurlProcess() ) {
-      if ( $result = $this->getResults('post/{post_id}', new PostModel) ) {
-        $result['output'] = View::make('layout.post', array('post'=>$result['output']['data']));
+    if ( $this->chkCurlProcess('curl') ) {
+      $c_url = PostModel::generateApiUrl( 'post/{post_id}', PostModel::autoFill(Input::old(), PostModel::$qs_fill) );
+      $c_result = PostModel::getResult( $c_url, 'get' );
 
-        $data['result'] = $result;
+      $data['request_url'] = $c_url;
+      $data['result'] = $c_result;
+
+      if ( $c_result['status'] ) {
+        $data['htmlview'] = View::make('layout.post', array('post'=>$c_result['output']['data']));
       }
-    } 
+    }
     
-    return View::make('post.readPost', $data);
+    return View::make('post.readpost', $data);
   }
 
   /**
@@ -135,13 +168,13 @@ class PostController extends BaseController {
   * @return Redirect
   */
   public function postReadPost() {
-    $validator = Validator::make( Input::get(), PostModel::$rules );
+    $validator = Validator::make( Input::get(), PostModel::$qs_rules );
 
     if ( $validator->fails() ) {
-      return Redirect::route('readpost')->withErrors($validator)->withInput();
+      return Redirect::route('read_post')->withErrors($validator)->withInput();
     }
     else {
-      return Redirect::route('readpost', array('curl'=>1))->withInput();
+      return Redirect::route('read_post', array('curl'=>1))->withInput();
     }
   }
 
@@ -151,59 +184,40 @@ class PostController extends BaseController {
   */
   public function getEditPost($post_id=null) {
     $data = $this->getMeta();
-    $data['desc'] = 'Request URL: POST ' . Config::get('app.api_url') . 'post/&lt;post_id&gt;';
+    $data['desc'] .= 'post/&lt;post_id&gt;';
 
     //get form result from $post_id 
     if ( $post_id ) {
-      if ( $result = $this->getResults('post/'.$post_id, new PostModel) ) {
+      $c_url = PostModel::generateApiUrl( 'post/{post_id}', PostModel::autoFill(Input::old(), PostModel::$qs_fill) );
+      $post = PostModel::getResult( $c_url, 'get' );
+
+      if ( $post['status'] ) {
         $categories = CommonHelper::getCategories();
-        $result['output'] = View::make('post.editpost', array('post'=>$result['output']['data'], 'categories'=>$categories));
-        
-        $data['result'] = $result;
+        $data['htmlview'] = View::make( 'post.editpost', array('post'=>$post['output']['data'], 'categories'=>$categories) );
       }
+
+      $data['request_url'] = $c_url;
+      $data['result'] = $post;
     }
 
-    return View::make('post.editPost', $data);
+    return View::make('post.editpost', $data);
   }
 
   /**
   * POST /post/editpost
   * @return Redirect
   */
-  public function postEditPost() {
-    $validator = Validator::make( Input::get(), PostModel::$rules );
+  public function postEditPost($post_id=null) {
+    if ( empty($post_id) )
+      $validator = Validator::make( Input::get(), PostModel::$qs_rules );
+    else
+      $validator = Validator::make( Input::get(), PostModel::$form_create_rules );
 
     if ( $validator->fails() ) {
-      return Redirect::route('editpost')->withErrors($validator)->withInput();
+      return Redirect::route('edit_post')->withErrors($validator)->withInput();
     }
     else {
-      return Redirect::route('editpost', array('post_id'=>Input::get('post_id')))->withInput();
-    }
-  }
-
-  /**
-  * GET /post/deletepost view
-  * @return View
-  */
-  public function getDeletePost() {
-    $data = $this->getMeta();
-    $data['desc'] = 'Request URL: DELETE ' . Config::get('app.api_url') . 'post/&lt;post_id&gt;';
-
-    return View::make('post.editPost', $data);
-  }
-
-  /**
-  * POST /post/deletepost
-  * @return Redirect
-  */
-  public function postDeletePost() {
-    $validator = Validator::make( Input::get(), PostModel::$rules );
-
-    if ( $validator->fails() ) {
-      return Redirect::route('editpost')->withErrors($validator)->withInput();
-    }
-    else {
-      return Redirect::route('editpost', array('post_id'=>Input::get('post_id')))->withInput();
+      return Redirect::route('edit_post', array('post_id'=>Input::get('post_id')))->withInput();
     }
   }
 

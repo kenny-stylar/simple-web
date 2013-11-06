@@ -84,39 +84,42 @@ Route::post('/feed', array(
 ));
 
 //post page
-Route::get('/post/user', array(
-  'as'    => 'userpost',
-  'uses'  => 'PostController@getUserPost'
+Route::get('/post/userposts', array(
+  'as'    => 'user_posts',
+  'uses'  => 'PostController@getUserPosts'
 ));
-Route::post('/post/user', array(
-  'uses'  => 'PostController@postUserPost'
+Route::post('/post/userposts', array(
+  'uses'  => 'PostController@postUserPosts'
 ));
-Route::get('/post/userlike', array(
-  'as'    => 'userlike',
-  'uses'  => 'PostController@getUserLike'
+Route::get('/post/userlikes', array(
+  'as'    => 'user_likes',
+  'uses'  => 'PostController@getUserLikes'
 ));
-Route::post('/post/userlike', array(
-  'uses'  => 'PostController@postUserLike'
+Route::post('/post/userlikes', array(
+  'uses'  => 'PostController@postUserLikes'
 ));
 Route::get('/post/createpost', array(
-  'as'    => 'createpost',
+  'as'    => 'create_post',
   'uses'  => 'PostController@getCreatePost'
 ));
+Route::post('/post/createpost', array(
+  'uses'  => 'PostController@postCreatePost'
+));
 Route::get('/post/readpost', array(
-  'as'    => 'readpost',
+  'as'    => 'read_post',
   'uses'  => 'PostController@getReadPost'
 ));
 Route::post('/post/readpost', array(
   'uses'  => 'PostController@postReadPost'
 ));
 Route::get('/post/editpost/{post_id?}', array(
-  'as'    => 'editpost',
+  'as'    => 'edit_post',
   'uses'  => 'PostController@getEditPost'
 ));
-Route::post('/post/editpost', array(
+Route::post('/post/editpost/{post_id?}', array(
   'uses'  => 'PostController@postEditPost'
 ));
 Route::get('/post/deletepost', array(
-  'as'    => 'deletepost',
+  'as'    => 'delete_post',
   'uses'  => 'PostController@getDeletePost'
 ));
