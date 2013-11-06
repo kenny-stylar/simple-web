@@ -17,32 +17,12 @@ class BaseController extends Controller {
 
 	/**
   * Check for CURL validation pass
+  * @param $key - key_qs to check
+  *
   * @return Boolean
   */
-  protected function chkCurlProcess() {
-  	return ( !empty(Input::get('curl')) && Input::get('curl') == 1 && count(Input::old()) > 0 );
-  }
-
-  /**
-  * Showing output if available
-  * @return Array - url & output
-  */
-  protected function getResults($base, $model) {
-    $return = array();
-    
-    //get data through API
-    if ( preg_match('/{(.*?)}/',$base, $matches) ) {
-      $key = $matches[1];
-      $base = str_replace('{'.$key.'}', Input::old($key), $base);
-    }
-
-    $return['url'] = $model::generateApiUrl( $base, Input::old() );
-    $return['output'] = $model::curlRequest( $return['url'] );
-
-    if ( isset($return['output']['error']) ) 
-    	return false;
-    else
-    	return $return;
+  protected function chkCurlProcess($key) {
+  	return ( !empty(Input::get($key)) && Input::get($key) == 1 && count(Input::old()) > 0 );
   }
 
 }

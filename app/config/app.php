@@ -193,6 +193,5 @@ return array(
 	*/
 
 	'api_url' => 'https://api.seeties.me/',
-	'token' 	=> 'JDJ5JDA4JGJsRHBtbXBwWmRabjV0OENlTC43Zy4yaTQ4L1NGR3M4NWV1b3R3bXJrWnkxMUNNWGpTY1F5',
 
 );
