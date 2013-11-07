@@ -54,6 +54,7 @@ class UserModel extends ApiModel {
     'other_city'  => '',
     'categories'  => '',
     'description' => '',
+    'profile_photo' => '',
     'personal_link' => ''
   );
 

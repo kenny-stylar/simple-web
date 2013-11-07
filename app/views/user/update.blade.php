@@ -7,7 +7,7 @@
 
   @if (!empty($user))
   <div class="form">
-    {{ Form::open( array('class'=>'form-horizontal')) }}
+    {{ Form::open( array('files' => true, 'class'=>'form-horizontal')) }}
 
       @if ($errors->first())
       <div class="alert alert-danger">
@@ -64,15 +64,27 @@
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('home_city', 'Home', array('class'=>'col-lg-2 control-label required')) }}
+        {{ Form::label('geohome_city', 'Home', array('class'=>'col-lg-2 control-label required')) }}
         <div class="col-lg-10">
-          {{ Form::text('home_city', '', array('class'=>'form-control')) }}
+          {{ Form::text('geohome_city', $user['home_city']['formatted_address'], array('class'=>'form-control geolocation')) }}
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('other_city', 'Work', array('class'=>'col-lg-2 control-label')) }}
+        {{ Form::label('home_city', 'Home', array('class'=>'col-lg-2 control-label required')) }}
         <div class="col-lg-10">
-          {{ Form::text('other_city', '', array('class'=>'form-control')) }}
+          {{ Form::text('home_city', json_encode($user['home_city']), array('class'=>'form-control', 'readonly'=>'readonly')) }}
+        </div>
+      </div>
+      <div class="form-group">
+        {{ Form::label('geoother_city', 'Work', array('class'=>'col-lg-2 control-label')) }}
+        <div class="col-lg-10">
+          {{ Form::text('geoother_city', $user['other_city']['formatted_address'], array('class'=>'form-control geolocation')) }}
+        </div>
+      </div>
+      <div class="form-group">
+        {{ Form::label('other_city', 'Work (JSON)', array('class'=>'col-lg-2 control-label')) }}
+        <div class="col-lg-10">
+          {{ Form::text('other_city', json_encode($user['other_city']), array('class'=>'form-control', 'readonly'=>'readonly')) }}
         </div>
       </div>
       <div class="form-group">
@@ -92,6 +104,15 @@
         {{ Form::label('description', 'Description', array('class'=>'col-lg-2 control-label')) }}
         <div class="col-lg-10">
           {{ Form::textarea('description', $user['description'], array('class'=>'form-control')) }}
+        </div>
+      </div>
+      <div class="form-group">
+        {{ Form::label('profile_photo', 'Profile Photo', array('class'=>'col-lg-2 control-label')) }}
+        <div class="col-lg-10">
+          @if (isset($user['profile_photo']))
+          <img src="{{ $user['profile_photo'].'?token='.Session::get('user_token').'&_id='.date_timestamp_get(date_create()) }}" />
+          @endif
+          {{ Form::file('profile_photo', array('class'=>'form-control')) }}
         </div>
       </div>
       <div class="form-group">

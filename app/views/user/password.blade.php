@@ -15,38 +15,38 @@
       @endif
 
       <div class="form-group">
-        {{ Form::label('uid', 'User ID', array('class'=>'col-lg-2 control-label fhidden')) }}
-        <div class="col-lg-10">
+        {{ Form::label('uid', 'User ID', array('class'=>'col-lg-3 control-label fhidden')) }}
+        <div class="col-lg-9">
           {{ Form::text('uid', Session::get('uid'), array('class'=>'form-control', 'readonly'=>'readonly')) }}
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('token', 'Token', array('class'=>'col-lg-2 control-label fhidden')) }}
-        <div class="col-lg-10">
+        {{ Form::label('token', 'Token', array('class'=>'col-lg-3 control-label fhidden')) }}
+        <div class="col-lg-9">
           {{ Form::text('token', Session::get('user_token'), array('class'=>'form-control', 'readonly'=>'readonly')) }}
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('old_password', 'Old Password', array('class'=>'col-lg-2 control-label required')) }}
-        <div class="col-lg-10">
+        {{ Form::label('old_password', 'Old Password', array('class'=>'col-lg-3 control-label required')) }}
+        <div class="col-lg-9">
           {{ Form::password('old_password', array('class'=>'form-control')) }}
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('new_password', 'New Password', array('class'=>'col-lg-2 control-label required')) }}
-        <div class="col-lg-10">
+        {{ Form::label('new_password', 'New Password', array('class'=>'col-lg-3 control-label required')) }}
+        <div class="col-lg-9">
           {{ Form::password('new_password', array('class'=>'form-control')) }}
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('new_password_confirmation', 'Confirm Password', array('class'=>'col-lg-2 control-label required')) }}
-        <div class="col-lg-10">
+        {{ Form::label('new_password_confirmation', 'Confirm Password', array('class'=>'col-lg-3 control-label required')) }}
+        <div class="col-lg-9">
           {{ Form::password('new_password_confirmation', array('class'=>'form-control')) }}
         </div>
       </div>
       
       <div class="form-group">
-        <div class="col-lg-offset-2 col-lg-10">
+        <div class="col-lg-offset-3 col-lg-9">
           {{ Form::submit('Change Password', array('class'=>'btn btn-info')) }}
         </div>
       </div>

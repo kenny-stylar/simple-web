@@ -47,13 +47,7 @@
 
   @if (!empty($result))
   <div class="result">
-    @if ($result['status'])
-    {{ CommonHelper::preEcho($result['output']) }}
-    @else
-    <div class="alert alert-danger">
-      {{ array_get($result, 'output.message') }}
-    </div>
-    @endif
+    <img src="{{ $result }}" />
   </div>
   @else
   <p>No Request Make</p>

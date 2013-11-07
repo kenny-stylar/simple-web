@@ -4,12 +4,13 @@ $(".geolocation")
 })
 .geocomplete()
 .bind("geocode:result", function(event, result) {
+  //console.log(result);
   //create address components
-  var filter_comp = ['locality', 'route', 'country', 'administrative_area_level_1', 'sublocality'];
+  var filter_comp = ['route', 'locality', 'country', 'administrative_area_level_1', 'sublocality'];
   var address_comp = result.address_components;
   var own_comp = [];
   for ( var i=0; i<address_comp.length; i++ ) {
-    if ( $.inArray(address_comp[i].types[0], filter_comp) ) {
+    if ( filter_comp.indexOf(address_comp[i].types[0]) != -1 ) {
       own_comp[ address_comp[i].types[0] ] = address_comp[i].long_name;
     }
   }
@@ -23,5 +24,7 @@ $(".geolocation")
     'place_id' : result.id
   };
 
-  $('#location').val( JSON.stringify(geoloc) );
+  //bind result to targeted object
+  var target = $(this).attr('id').replace('geo', '');
+  $('#'+target).val( JSON.stringify(geoloc) );
 });

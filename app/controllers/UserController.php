@@ -220,6 +220,11 @@ class UserController extends BaseController {
     $data = $this->getMeta();
     $data['desc'] .= '&lt;uid&gt;';
     $data['categories'] = CommonHelper::getCategories();
+    $data['scripts'] = array(
+      'http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places',
+      URL::asset('js/jquery.geocomplete.min.js'),
+      URL::asset('js/geolocation.js')
+    );
 
     //default load user data
     if ( Session::has('uid') && Session::has('user_token') ) {
@@ -230,14 +235,6 @@ class UserController extends BaseController {
         $data['user'] = $user['output'];
     }
 
-    if ( $this->chkCurlProcess('curl') ) {
-      $c_url = UserModel::generateApiUrl( '{uid}', UserModel::autoFill(Input::old(), UserModel::$qs_fill) );
-      $c_result = UserModel::getResult( $c_url, 'post', UserModel::autoFill(Input::old(), UserModel::$form_upd_fill) );
-
-      $data['request_url'] = $c_url;
-      $data['result'] = $c_result;
-    }
-
     return View::make('user.update', $data);
   }
 
@@ -246,13 +243,23 @@ class UserController extends BaseController {
   * @return Redirect
   */
   public function postUserUpdate($uid=null) {
-    $validator = Validator::make( Input::get(), UserModel::$form_upd_rules );
+    //cater for file upload
+    $files = array();
+    foreach ( Input::file() AS $name => $file ) {
+      $files[$name] = new CurlFile($file->getRealPath(), $file->getMimeType(), $file->getClientOriginalName());
+    }
+    $data = array_merge(Input::get(), $files);
+
+    $validator = Validator::make( $data, UserModel::$form_upd_rules );
 
     if ( $validator->fails() ) {
       return Redirect::route('user_update')->withErrors($validator)->withInput();
     }
     else {
-      return Redirect::route('user_update', array('curl'=>1))->withInput();
+      $c_url = UserModel::generateApiUrl( '{uid}', UserModel::autoFill($data, UserModel::$qs_fill) );
+      $c_result = UserModel::getResult( $c_url, 'post', UserModel::autoFill($data, UserModel::$form_upd_fill) );
+
+      return Redirect::route('user_update')->withInput();
     }
   }
 
@@ -301,10 +308,9 @@ class UserController extends BaseController {
 
     if ( $this->chkCurlProcess('curl') ) {
       $c_url = UserModel::generateApiUrl( '{uid}/profile-photo', UserModel::autoFill(Input::old(), UserModel::$qs_fill) );
-      $c_result = UserModel::getResult( $c_url, 'get' );
 
       $data['request_url'] = $c_url;
-      $data['result'] = $c_result;
+      $data['result'] = $c_url;
     }
 
     return View::make('user.profilepic', $data);
