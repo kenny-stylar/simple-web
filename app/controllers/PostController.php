@@ -113,6 +113,11 @@ class PostController extends BaseController {
     $data = $this->getMeta();
     $data['desc'] .= 'post';
     $data['categories'] = CommonHelper::getCategories();
+    $data['scripts'] = array(
+      'http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places',
+      URL::asset('js/jquery.geocomplete.min.js'),
+      URL::asset('js/geolocation.js')
+    );
 
     if ( $this->chkCurlProcess('curl') ) {
       $c_url = PostModel::generateApiUrl( 'post', PostModel::autoFill(Input::old(), PostModel::$qs_post_fill) );
@@ -185,19 +190,31 @@ class PostController extends BaseController {
   public function getEditPost($post_id=null) {
     $data = $this->getMeta();
     $data['desc'] .= 'post/&lt;post_id&gt;';
+    $data['scripts'] = array(
+      'http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places',
+      URL::asset('js/jquery.geocomplete.min.js'),
+      URL::asset('js/geolocation.js')
+    );
 
     //get form result from $post_id 
     if ( $post_id ) {
-      $c_url = PostModel::generateApiUrl( 'post/{post_id}', PostModel::autoFill(Input::old(), PostModel::$qs_fill) );
-      $post = PostModel::getResult( $c_url, 'get' );
+
+      //do post first
+      if ( $this->chkCurlProcess('curl') ) {
+        $c_url = PostModel::generateApiUrl( 'post/{post_id}', array('post_id'=>$post_id, 'token'=>Session::get('user_token')) );
+        $c_result = PostModel::getResult( $c_url, 'post', PostModel::autoFill(Input::old(), PostModel::$form_create_fill) );
+      }
+      
+      $c_url2 = PostModel::generateApiUrl( 'post/{post_id}', array('post_id'=>$post_id, 'token'=>Session::get('user_token')) );
+      $post = PostModel::getResult( $c_url2, 'get' );
 
       if ( $post['status'] ) {
-        $categories = CommonHelper::getCategories();
-        $data['htmlview'] = View::make( 'post.editpost', array('post'=>$post['output']['data'], 'categories'=>$categories) );
+        $data['categories'] = CommonHelper::getCategories();
+        $data['post'] = $post['output']['data'];
       }
 
-      $data['request_url'] = $c_url;
-      $data['result'] = $post;
+      $data['request_url'] = !empty($c_url) ? $c_url : $c_url2;
+      $data['result'] = !empty($c_result) ? $c_result : $post;
     }
 
     return View::make('post.editpost', $data);
@@ -217,7 +234,10 @@ class PostController extends BaseController {
       return Redirect::route('edit_post')->withErrors($validator)->withInput();
     }
     else {
-      return Redirect::route('edit_post', array('post_id'=>Input::get('post_id')))->withInput();
+      if ( empty($post_id) )
+        return Redirect::route('edit_post', array('post_id'=>Input::get('post_id')))->withInput();
+      else
+        return Redirect::route('edit_post', array('post_id'=>Input::get('post_id'), 'curl'=>1))->withInput();
     }
   }
 

@@ -45,7 +45,9 @@ class PostModel extends ApiModel {
     'message'     => 'required|min:300|max:500',
     'category'    => 'required|numeric',
     'link'        => 'url',
-    'place_name'  => 'required|max:50'
+    'place_name'  => 'required|max:50',
+    'token'       => 'required',
+    'post_id'     => 'required'
   );
 
 }

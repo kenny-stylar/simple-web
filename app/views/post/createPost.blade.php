@@ -35,19 +35,25 @@
       <div class="form-group">
         {{ Form::label('url', 'URL', array('class'=>'col-lg-2 control-label')) }}
         <div class="col-lg-10">
-          {{ Form::text('url', '', array('class'=>'form-control')) }}
+          {{ Form::text('url', '', array('class'=>'form-control', 'placeholder'=>'http://www.blogger.com/')) }}
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('place_name', 'Place', array('class'=>'col-lg-2 control-label required')) }}
+        {{ Form::label('place_name', 'Place Name', array('class'=>'col-lg-2 control-label required')) }}
         <div class="col-lg-10">
-          {{ Form::text('place_name', '', array('class'=>'form-control')) }}
+          {{ Form::text('place_name', '', array('class'=>'form-control', 'placeholder'=>'Place Name')) }}
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('location', 'Location', array('class'=>'col-lg-2 control-label')) }}
+        {{ Form::label('geolocation', 'Location', array('class'=>'col-lg-2 control-label')) }}
         <div class="col-lg-10">
-          {{ Form::text('location', '', array('class'=>'form-control')) }}
+          {{ Form::text('geolocation', '', array('class'=>'form-control geolocation')) }}
+        </div>
+      </div>
+      <div class="form-group">
+        {{ Form::label('location', 'Location (JSON)', array('class'=>'col-lg-2 control-label fhidden')) }}
+        <div class="col-lg-10">
+          {{ Form::text('location', '', array('class'=>'form-control', 'readonly'=>'readonly')) }}
         </div>
       </div>
       

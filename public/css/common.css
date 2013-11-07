@@ -40,6 +40,10 @@ code {
   font-weight: bold;
   font-size: 17px;
 }
+.control-label.fhidden {
+  color: #bbb;
+  font-style: italic;
+}
 .feedblock {
   padding: 10px;
   border: 1px solid #ddd;

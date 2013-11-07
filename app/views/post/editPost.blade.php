@@ -58,24 +58,31 @@
   <p>No Request Make</p>
   @endif
 
-  @if (!empty($htmlview))
-  {{ $htmlview }}
-  @endif
+  <p>&nbsp;</p>
+  <div class="page-header">
+    <h1>Response HTML View</h1>
+  </div>
 
   @if ( !empty($post) )
   <div id="{{ $post['post_id'] }}" class="form">
     {{ Form::open( array('class'=>'form-horizontal') ) }}
       
       <div class="form-group">
-        {{ Form::label('category', 'Category', array('class'=>'col-lg-2 control-label required')) }}
-        <div class="col-lg-5">
-          {{ Form::select('category', $categories, $post['category'], array('class'=>'form-control')) }}
+        {{ Form::label('post_id', 'Post ID', array('class'=>'col-lg-2 control-label fhidden')) }}
+        <div class="col-lg-10">
+          {{ Form::text('post_id', $post['post_id'], array('class'=>'form-control', 'readonly'=>'readonly')) }}
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('post_id', 'Post ID', array('class'=>'col-lg-2 control-label required')) }}
+        {{ Form::label('token', 'Token', array('class'=>'col-lg-2 control-label fhidden')) }}
         <div class="col-lg-10">
-          {{ Form::text('post_id', $post['post_id'], array('class'=>'form-control')) }}
+          {{ Form::text('token', Session::get('user_token'), array('class'=>'form-control', 'readonly'=>'readonly')) }}
+        </div>
+      </div>
+      <div class="form-group">
+        {{ Form::label('category', 'Category', array('class'=>'col-lg-2 control-label required')) }}
+        <div class="col-lg-5">
+          {{ Form::select('category', $categories, $post['category'], array('class'=>'form-control')) }}
         </div>
       </div>
       <div class="form-group">
@@ -87,19 +94,25 @@
       <div class="form-group">
         {{ Form::label('link', 'URL', array('class'=>'col-lg-2 control-label required')) }}
         <div class="col-lg-10">
-          {{ Form::text('link', $post['link'], array('class'=>'form-control')) }}
+          {{ Form::text('link', $post['link'], array('class'=>'form-control', 'placeholder'=>'http://www.blogger.com/')) }}
         </div>
       </div>
       <div class="form-group">
         {{ Form::label('place_name', 'Place', array('class'=>'col-lg-2 control-label required')) }}
         <div class="col-lg-10">
-          {{ Form::text('place_name', $post['place_name'], array('class'=>'form-control')) }}
+          {{ Form::text('place_name', $post['place_name'], array('class'=>'form-control', 'placeholder'=>'Place Name')) }}
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('location', 'Location', array('class'=>'col-lg-2 control-label required')) }}
+        {{ Form::label('geolocation', 'Location', array('class'=>'col-lg-2 control-label required')) }}
         <div class="col-lg-10">
-          {{ Form::text('location', serialize($post['location']), array('class'=>'form-control')) }}
+          {{ Form::text('geolocation', $post['location']['formatted_address'], array('class'=>'form-control geolocation')) }}
+        </div>
+      </div>
+      <div class="form-group">
+        {{ Form::label('location', 'Location (JSON)', array('class'=>'col-lg-2 control-label fhidden')) }}
+        <div class="col-lg-10">
+          {{ Form::text('location', json_encode($post['location']), array('class'=>'form-control', 'readonly'=>'readonly')) }}
         </div>
       </div>
       <div class="form-group">
@@ -110,6 +123,8 @@
 
     {{ Form::close() }}
   </div>
+  @else
+  <p>No Request Make</p>
   @endif
 @stop
 
