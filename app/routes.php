@@ -149,3 +149,16 @@ Route::get('/explore/cityposts', array(
 Route::post('/explore/cityposts', array(
   'uses'  => 'ExploreController@postCityPosts'
 ));
+
+//system page
+Route::get('/system/feedback', array(
+  'as'    => 'system_feedback',
+  'uses'  => 'SystemController@getFeedback'
+));
+Route::post('/system/feedback', array(
+  'uses'  => 'SystemController@postFeedback'
+));
+Route::get('/system/category', array(
+  'as'    => 'system_category',
+  'uses'  => 'SystemController@getCategory'
+));

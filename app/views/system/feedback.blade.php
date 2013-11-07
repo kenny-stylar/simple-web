@@ -15,20 +15,36 @@
       @endif
 
       <div class="form-group">
-        {{ Form::label('token', 'Token', array('class'=>'col-lg-2 control-label fhidden')) }}
-        <div class="col-lg-10">
-          {{ Form::text('token', Session::get('user_token'), array('class'=>'form-control', 'readonly'=>'readonly')) }}
+        {{ Form::label('type', 'Type', array('class'=>'col-lg-2 control-label required')) }}
+        <div class="col-lg-4">
+          {{ Form::select('type', array(
+            'feedback' => 'Feedback',
+            'problem'  => 'Problem'
+          ), '', array('class'=>'form-control')) }}
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('post_id', 'Post ID', array('class'=>'col-lg-2 control-label required')) }}
+        {{ Form::label('email', 'Email', array('class'=>'col-lg-2 control-label required')) }}
         <div class="col-lg-10">
-          {{ Form::text('post_id', '5279f7f9b149f6da1600000a', array('class'=>'form-control')) }}
+          {{ Form::text('email', '', array('class'=>'form-control')) }}
         </div>
       </div>
+      <div class="form-group">
+        {{ Form::label('message', 'Message', array('class'=>'col-lg-2 control-label required')) }}
+        <div class="col-lg-10">
+          {{ Form::textarea('message', '', array('class'=>'form-control')) }}
+        </div>
+      </div>
+      <div class="form-group">
+        {{ Form::label('screenshot', 'Screenshot', array('class'=>'col-lg-2 control-label')) }}
+        <div class="col-lg-10">
+          {{ Form::file('screenshot', array('class'=>'form-control')) }}
+        </div>
+      </div>
+      
       <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
-          {{ Form::submit('Submit', array('class'=>'btn btn-info')) }}
+          {{ Form::submit('Submit Feedback', array('class'=>'btn btn-info')) }}
         </div>
       </div>
 
@@ -57,11 +73,6 @@
   @else
   <p>No Request Make</p>
   @endif
-
-  @if (!empty($htmlview))
-  {{ $htmlview }}
-  @endif
-
 @stop
 
 @section('sidebar')

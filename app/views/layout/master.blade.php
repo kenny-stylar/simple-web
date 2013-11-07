@@ -22,6 +22,7 @@
             <li><a href="{{ URL::route('feed') }}">Feed</a></li>
             <li><a href="{{ URL::route('user_posts') }}">Post</a></li>
             <li><a href="{{ URL::route('cities') }}">Explore</a></li>
+            <li><a href="{{ URL::route('system_category') }}">System</a></li>
           </ul>
         </nav>
       </div>

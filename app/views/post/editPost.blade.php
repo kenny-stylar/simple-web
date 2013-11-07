@@ -23,7 +23,7 @@
       <div class="form-group">
         {{ Form::label('post_id', 'Post ID', array('class'=>'col-lg-2 control-label required')) }}
         <div class="col-lg-10">
-          {{ Form::text('post_id', '5270930ab149f6042f000015', array('class'=>'form-control')) }}
+          {{ Form::text('post_id', '5279f7f9b149f6da1600000a', array('class'=>'form-control')) }}
         </div>
       </div>
       <div class="form-group">
