@@ -32,7 +32,7 @@
           @foreach ( $categories AS $key => $val )
           <div class="checkbox">
             <label>
-              {{ Form::checkbox('categories[]', $key) }}
+              {{ Form::checkbox('categories[]', $key, true) }}
               {{ $val }}
             </label>
           </div>
@@ -77,9 +77,16 @@
   <p>No Request Make</p>
   @endif
 
+  <p>&nbsp;</p>
+  <div class="page-header">
+    <h1>Response HTML View</h1>
+  </div>
+
+  <div class="html-result">
   @if (!empty($htmlview))
   {{ $htmlview }}
   @endif
+  </div>
 
 @stop
 

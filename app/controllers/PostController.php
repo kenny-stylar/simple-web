@@ -118,13 +118,15 @@ class PostController extends BaseController {
       URL::asset('js/jquery.geocomplete.min.js'),
       URL::asset('js/geolocation.js')
     );
-
+    
     if ( $this->chkCurlProcess('curl') ) {
       $c_url = PostModel::generateApiUrl( 'post', PostModel::autoFill(Input::old(), PostModel::$qs_post_fill) );
-      $c_result = PostModel::getResult( $c_url, 'post', PostModel::autoFill(Input::old(), PostModel::$form_create_fill) );
-
+      
       $data['request_url'] = $c_url;
-      $data['result'] = $c_result;
+      $data['result'] = array(
+        'status' => 1,
+        'output' => 'Post created'
+      );
     }
 
     return View::make('post.createpost', $data);
@@ -135,12 +137,19 @@ class PostController extends BaseController {
   * @return Redirect
   */
   public function postCreatePost() {
-    $validator = Validator::make( Input::get(), PostModel::$form_create_rules );
+    //cater for file upload
+    $inputs = PostModel::mergeFilesUpload( Input::get() );
+
+    $validator = Validator::make( $inputs, PostModel::$form_create_rules );
 
     if ( $validator->fails() ) {
       return Redirect::route('create_post')->withErrors($validator)->withInput();
     }
     else {
+      //curl post inputs
+      $c_url = PostModel::generateApiUrl( 'post', PostModel::autoFill($inputs, PostModel::$qs_post_fill) );
+      $c_result = PostModel::getResult( $c_url, 'post', PostModel::autoFill($inputs, PostModel::$form_create_fill) );
+
       return Redirect::route('create_post', array('curl'=>1))->withInput();
     }
   }
@@ -197,24 +206,17 @@ class PostController extends BaseController {
     );
 
     //get form result from $post_id 
-    if ( $post_id ) {
-
-      //do post first
-      if ( $this->chkCurlProcess('curl') ) {
-        $c_url = PostModel::generateApiUrl( 'post/{post_id}', array('post_id'=>$post_id, 'token'=>Session::get('user_token')) );
-        $c_result = PostModel::getResult( $c_url, 'post', PostModel::autoFill(Input::old(), PostModel::$form_create_fill) );
-      }
-      
-      $c_url2 = PostModel::generateApiUrl( 'post/{post_id}', array('post_id'=>$post_id, 'token'=>Session::get('user_token')) );
-      $post = PostModel::getResult( $c_url2, 'get' );
+    if ( $post_id ) {    
+      $c_url = PostModel::generateApiUrl( 'post/{post_id}', array('post_id'=>$post_id, 'token'=>Session::get('user_token')) );
+      $post = PostModel::getResult( $c_url, 'get' );
 
       if ( $post['status'] ) {
         $data['categories'] = CommonHelper::getCategories();
         $data['post'] = $post['output']['data'];
       }
 
-      $data['request_url'] = !empty($c_url) ? $c_url : $c_url2;
-      $data['result'] = !empty($c_result) ? $c_result : $post;
+      $data['request_url'] = $c_url;
+      $data['result'] = $post;
     }
 
     return View::make('post.editpost', $data);
@@ -225,19 +227,31 @@ class PostController extends BaseController {
   * @return Redirect
   */
   public function postEditPost($post_id=null) {
+    //cater for file upload
+    $inputs = PostModel::mergeFilesUpload( Input::get() );
+
     if ( empty($post_id) )
-      $validator = Validator::make( Input::get(), PostModel::$qs_rules );
+      $validator = Validator::make( $inputs, PostModel::$qs_rules );
     else
-      $validator = Validator::make( Input::get(), PostModel::$form_create_rules );
+      $validator = Validator::make( $inputs, PostModel::$form_create_rules );
 
     if ( $validator->fails() ) {
       return Redirect::route('edit_post')->withErrors($validator)->withInput();
     }
     else {
-      if ( empty($post_id) )
+      if ( empty($post_id) ) {
         return Redirect::route('edit_post', array('post_id'=>Input::get('post_id')))->withInput();
-      else
-        return Redirect::route('edit_post', array('post_id'=>Input::get('post_id'), 'curl'=>1))->withInput();
+      }
+      else {
+        //do post
+        $c_url = PostModel::generateApiUrl( 'post/{post_id}', array('post_id'=>$post_id, 'token'=>Session::get('user_token')) );
+        $c_result = PostModel::getResult( $c_url, 'post', PostModel::autoFill($inputs, PostModel::$form_create_fill) );
+
+        if ( $c_result['status'] )
+          return Redirect::route('edit_post', array('post_id'=>Input::get('post_id'), 'curl'=>1))->withInput();
+        else
+          return Redirect::route('edit_post', array('post_id'=>Input::get('post_id')))->withErrors("update failed.")->withInput();
+      }
     }
   }
 

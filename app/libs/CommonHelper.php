@@ -86,4 +86,20 @@ class CommonHelper {
       echo $obj;
     }
   }
+
+  /**
+  * append user token to URL
+  * @param $string - string to append
+  *
+  * @return String
+  */
+  public static function appendToken($str) {
+    if ( !Session::has('user_token') )
+      return $str;
+
+    if ( strpos($str, '?') !== false ) 
+      return $str . '&token=' . Session::get('user_token');
+    else
+      return $str . '?token=' . Session::get('user_token');
+  }
 }

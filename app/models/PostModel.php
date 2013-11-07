@@ -39,6 +39,7 @@ class PostModel extends ApiModel {
     'link'        => '',
     'place_name'  => '',
     'location'    => '',
+    'photos[]'    => ''
   );
 
   public static $form_create_rules = array(
@@ -46,8 +47,7 @@ class PostModel extends ApiModel {
     'category'    => 'required|numeric',
     'link'        => 'url',
     'place_name'  => 'required|max:50',
-    'token'       => 'required',
-    'post_id'     => 'required'
+    'token'       => 'required'
   );
 
 }

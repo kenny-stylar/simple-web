@@ -133,4 +133,35 @@ abstract class ApiModel {
     return $return;
   }
 
+  /**
+  * Merge data with Input::File() in CurlFile format
+  * @param $data - data to be merged
+  *
+  * @return Array
+  */
+  public static function mergeFilesUpload($data) {
+
+    if ( !is_array($data) ) 
+      return $data;
+
+    if ( count(Input::file()) < 1)   
+      return $data;
+
+    if( is_array(Input::file(array_keys(Input::file())[0])) && empty(Input::file(array_keys(Input::file())[0])[0]) )
+      return $data;
+
+    $files = array();
+    foreach ( Input::file() AS $name => $file ) {
+      if ( is_array($file) ) {
+        foreach( $file AS $f ) {
+          $files[$name.'[]'] = new CurlFile($f->getRealPath(), $f->getMimeType(), $f->getClientOriginalName());
+        } 
+      }
+      else
+        $files[$name] = new CurlFile($file->getRealPath(), $file->getMimeType(), $file->getClientOriginalName());
+    }
+
+    return array_merge($data, $files);
+  }
+
 }

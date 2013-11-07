@@ -52,6 +52,18 @@ code {
 .feedblock .fname {
   font-weight: bold;
 }
+.feedblock .faddress {
+  color: #777;
+  font-style: italic;
+}
 .result {
   margin-top: 40px;
+}
+.result pre {
+  max-height: 700px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.result.showall pre {
+  max-height: none;
 }

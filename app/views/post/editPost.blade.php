@@ -65,7 +65,7 @@
 
   @if ( !empty($post) )
   <div id="{{ $post['post_id'] }}" class="form">
-    {{ Form::open( array('class'=>'form-horizontal') ) }}
+    {{ Form::open( array('files' => true, 'class'=>'form-horizontal') ) }}
       
       <div class="form-group">
         {{ Form::label('post_id', 'Post ID', array('class'=>'col-lg-2 control-label fhidden')) }}
@@ -115,6 +115,17 @@
           {{ Form::text('location', json_encode($post['location']), array('class'=>'form-control', 'readonly'=>'readonly')) }}
         </div>
       </div>
+      <div class="form-group">
+        {{ Form::label('photos[]', 'Photo', array('class'=>'col-lg-2 control-label')) }}
+        <div class="col-lg-10">
+          @if (isset($post['photos'][0]['s']['url']))
+          <img src="{{ $post['photos'][0]['s']['url'].'?token='.Session::get('user_token').'&_id='.date_timestamp_get(date_create()) }}" />
+          @endif
+          {{ Form::file('photos[]', array('class'=>'form-control')) }}
+        </div>
+      </div>
+
+
       <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
           {{ Form::submit('Update', array('class'=>'btn btn-info')) }}

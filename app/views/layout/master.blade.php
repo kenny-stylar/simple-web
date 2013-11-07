@@ -64,5 +64,10 @@
   <script src="{{ $script }}"></script>
   @endforeach
   @endif
+  <script>
+  $('.result pre').on('click', function(e) {
+    $(this).parent().toggleClass('showall');
+  });
+  </script>
 </body>
 </html>

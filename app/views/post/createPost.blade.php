@@ -6,7 +6,7 @@
   </div>
 
   <div class="form">
-    {{ Form::open( array('class'=>'form-horizontal')) }}
+    {{ Form::open( array('files' => true, 'class'=>'form-horizontal')) }}
 
       @if ($errors->first())
       <div class="alert alert-danger">
@@ -45,7 +45,7 @@
         </div>
       </div>
       <div class="form-group">
-        {{ Form::label('geolocation', 'Location', array('class'=>'col-lg-2 control-label')) }}
+        {{ Form::label('geolocation', 'Location', array('class'=>'col-lg-2 control-label required')) }}
         <div class="col-lg-10">
           {{ Form::text('geolocation', '', array('class'=>'form-control geolocation')) }}
         </div>
@@ -56,7 +56,12 @@
           {{ Form::text('location', '', array('class'=>'form-control', 'readonly'=>'readonly')) }}
         </div>
       </div>
-      
+      <div class="form-group">
+        {{ Form::label('photos[]', 'Photo', array('class'=>'col-lg-2 control-label')) }}
+        <div class="col-lg-10">
+          {{ Form::file('photos[]', array('class'=>'form-control')) }}
+        </div>
+      </div>
       
       <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
